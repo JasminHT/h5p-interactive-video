@@ -210,6 +210,13 @@ class Endscreen extends H5P.EventDispatcher {
     });
 
     $('<div/>', {
+      'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-test`,
+      html: "Show people's answers here!",
+      appendTo: $row,
+      'aria-hidden': true
+    });
+
+    $('<div/>', {
       'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-score`,
       html: hasScore ? `${score} / ${maxScore}` : this.l10n.answeredScore,
       appendTo: $row,
