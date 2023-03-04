@@ -177,7 +177,7 @@ class Endscreen extends H5P.EventDispatcher {
    * @param {number} maxScore
    * @return {jQuery} DOM element for the table row.
    */
-  buildTableRow(time, title, score, maxScore) {
+  buildTableRow(time, title, score, maxScore, state, answerList) {
     const hasScore = isset(score) && isset(maxScore);
     const ariaLabel = hasScore ?
       this.l10n.tableRowSummaryWithScore : this.l10n.tableRowSummaryWithoutScore;
@@ -192,6 +192,33 @@ class Endscreen extends H5P.EventDispatcher {
         .replace('@minutes', Math.floor(time / 60))
         .replace('@seconds', time % 60)
     });
+
+
+    //we must get the answer text from the multichoice object
+
+    //const answer_number = state.answers ? state.answers[0] : -1;
+    //const answer = answerList.length ? answerList[answer_number].toString() : "nothing";
+
+    //I want to convert an array of numbers into an array of strings, I have another array who matches the numbers to the strings
+    //so can do stringarray[number] map
+    //const map1 = array1.map(x => x * 2);
+
+    //get an array of answer strings
+    const answer_numbers = state.answers;
+    const answers_array = answer_numbers.map(i => answerList[i]);
+
+    //convery array into UL html
+    var answers_html = $('ul.mylist')
+    $.each(answers_array, function(i)
+    {
+        var li = $('<li/>')
+            .addClass('answer-item')
+            .attr('role', 'answer-item')
+            .appendTo(answers_html);
+    });
+
+
+
 
     onClick($row, () => this.jump(time));
 
@@ -211,7 +238,7 @@ class Endscreen extends H5P.EventDispatcher {
 
     $('<div/>', {
       'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-test`,
-      html: "Show people's answers here!",
+      html: answers_html,
       appendTo: $row,
       'aria-hidden': true
     });
@@ -258,7 +285,11 @@ class Endscreen extends H5P.EventDispatcher {
       const instance = interaction.getInstance();
       const score = instance.getScore ? instance.getScore() : undefined;
       const maxScore = instance.getMaxScore ? instance.getMaxScore() : undefined;
-      this.$endscreenBottomTable.append(this.buildTableRow(time, title, score, maxScore));
+
+      const state = instance.getCurrentState ? instance.getCurrentState() : undefined;
+      const answerList = instance.getAnswerList ? instance.getAnswerList() : undefined;
+
+      this.$endscreenBottomTable.append(this.buildTableRow(time, title, score, maxScore, state, answerList));
     });
 
     const number = this.answered.length;
