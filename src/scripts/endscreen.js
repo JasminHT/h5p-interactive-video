@@ -194,31 +194,14 @@ class Endscreen extends H5P.EventDispatcher {
     });
 
 
-    //we must get the answer text from the multichoice object
-
-    //const answer_number = state.answers ? state.answers[0] : -1;
-    //const answer = answerList.length ? answerList[answer_number].toString() : "nothing";
-
-    //I want to convert an array of numbers into an array of strings, I have another array who matches the numbers to the strings
-    //so can do stringarray[number] map
-    //const map1 = array1.map(x => x * 2);
-
-    //get an array of answer strings
+    //Get the answers from the multichoice object
     const answer_numbers = state.answers;
-    const answers_array = answer_numbers.map(i => answerList[i]);
+    const answers_array = answer_numbers.map(number => answerList[number]);
 
-    //convery array into UL html
-    /*var answers_html = $('ul.mylist')
-    $.each(answers_array, function(i)
-    {
-        var li = $('<li/>')
-            .addClass('answer-item')
-            .appendTo(answers_html);
-    });
-
-
-    for (var i=0; i<)*/
-
+    var answer_string = "";
+    for (var i = 0; i<answers_array.length; i++) {
+        answer_string += answers_array[i];
+    }
 
     onClick($row, () => this.jump(time));
 
@@ -237,8 +220,8 @@ class Endscreen extends H5P.EventDispatcher {
     });
 
     $('<div/>', {
-      'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-test`,
-      html: answers_array.toString(),
+      'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-answers`,
+      html: answer_string,
       appendTo: $row,
       'aria-hidden': true
     });
