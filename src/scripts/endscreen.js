@@ -196,7 +196,11 @@ class Endscreen extends H5P.EventDispatcher {
 
     //Get the answers from the multichoice object
     const answer_numbers = state.answers;
-    const answers_array = answer_numbers.map(number => answerList[number]);
+    var answers_array = ["no answer"];
+
+    if ( Array.isArray(answer_numbers) && Array.isArray(answerList) ) {
+      answers_array = answer_numbers.map(number => answerList[number]);
+    }
 
     var answer_string = "";
     for (var i = 0; i<answers_array.length; i++) {
