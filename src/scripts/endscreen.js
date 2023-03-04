@@ -238,7 +238,7 @@ class Endscreen extends H5P.EventDispatcher {
 
     $('<div/>', {
       'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-test`,
-      html: state.answers.toString(),
+      html: answers_array.toString(),
       appendTo: $row,
       'aria-hidden': true
     });
