@@ -208,16 +208,16 @@ class Endscreen extends H5P.EventDispatcher {
     const answers_array = answer_numbers.map(i => answerList[i]);
 
     //convery array into UL html
-    var answers_html = $('ul.mylist')
+    /*var answers_html = $('ul.mylist')
     $.each(answers_array, function(i)
     {
         var li = $('<li/>')
             .addClass('answer-item')
-            .attr('role', 'answer-item')
             .appendTo(answers_html);
     });
 
 
+    for (var i=0; i<)*/
 
 
     onClick($row, () => this.jump(time));
@@ -238,7 +238,7 @@ class Endscreen extends H5P.EventDispatcher {
 
     $('<div/>', {
       'class': `${ENDSCREEN_STYLE_BASE}-overview-table-row-test`,
-      html: answers_html,
+      html: state.answers.toString(),
       appendTo: $row,
       'aria-hidden': true
     });
