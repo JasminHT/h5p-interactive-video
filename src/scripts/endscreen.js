@@ -177,7 +177,7 @@ class Endscreen extends H5P.EventDispatcher {
    * @param {number} maxScore
    * @return {jQuery} DOM element for the table row.
    */
-  buildTableRow(time, title, score, maxScore, state, answerList) {
+  buildTableRow(time, title, score, maxScore, answerList) {
     const hasScore = isset(score) && isset(maxScore);
     const ariaLabel = hasScore ?
       this.l10n.tableRowSummaryWithScore : this.l10n.tableRowSummaryWithoutScore;
@@ -193,18 +193,10 @@ class Endscreen extends H5P.EventDispatcher {
         .replace('@seconds', time % 60)
     });
 
-
-    //Get the answers from the multichoice object
-    const answer_numbers = state.answers;
-    var answers_array = ["no answer"];
-
-    if ( Array.isArray(answer_numbers) && Array.isArray(answerList) ) {
-      answers_array = answer_numbers.map(number => answerList[number]);
-    }
-
+    //convert the array of answers into a single string
     var answer_string = "";
-    for (var i = 0; i<answers_array.length; i++) {
-        answer_string += answers_array[i];
+    for (var i = 0; i < answerList.length; i++) {
+        answer_string += answerList[i];
     }
 
     onClick($row, () => this.jump(time));
@@ -273,10 +265,9 @@ class Endscreen extends H5P.EventDispatcher {
       const score = instance.getScore ? instance.getScore() : undefined;
       const maxScore = instance.getMaxScore ? instance.getMaxScore() : undefined;
 
-      const state = instance.getCurrentState ? instance.getCurrentState() : undefined;
       const answerList = instance.getAnswerList ? instance.getAnswerList() : undefined;
 
-      this.$endscreenBottomTable.append(this.buildTableRow(time, title, score, maxScore, state, answerList));
+      this.$endscreenBottomTable.append(this.buildTableRow(time, title, score, maxScore, answerList));
     });
 
     const number = this.answered.length;
