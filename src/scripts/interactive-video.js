@@ -795,7 +795,7 @@ InteractiveVideo.prototype.attach = function ($container) {
   };
 
   // Toggle mute/unmute on 'M'
-  onKey($container, [{
+  /*onKey($container, [{
     key: Keys.M,
   }], (e) => {
     if (ignoreEventForShortcutKey(e, '$volume')) {
@@ -822,7 +822,7 @@ InteractiveVideo.prototype.attach = function ($container) {
     else {
       that.togglePlayPause();
     }
-  });
+  });*/
 
   this.$container.append($(this.accessibility.getInteractionAnnouncer()));
 
