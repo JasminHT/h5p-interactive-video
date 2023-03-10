@@ -94,6 +94,25 @@ class Endscreen extends H5P.EventDispatcher {
       });
     }
 
+    //Define buttons for print and mail
+    this.$printEmailButtonContainer = $('<div/>', {
+        'class': `${ENDSCREEN_STYLE_BASE}-print-and-mail-button-container`
+      });
+
+    this.$printButton = H5P.JoubelUI.createButton({
+        'class': `${ENDSCREEN_STYLE_BASE}-print-button`,
+        html: "Print",
+        appendTo: this.$printEmailButtonContainer,
+        click: () => this.handlePrint()
+    });
+
+    this.$emailButton = H5P.JoubelUI.createButton({
+        'class': `${ENDSCREEN_STYLE_BASE}-email-button`,
+        html: "Email",
+        appendTo: this.$printEmailButtonContainer,
+        click: () => this.handleEmail()
+    });
+
     // Title row for the table at the bottom
     this.$endscreenOverviewTitle = $('<div/>', {
       'class': `${ENDSCREEN_STYLE_BASE}-overview-title`
@@ -120,8 +139,84 @@ class Endscreen extends H5P.EventDispatcher {
           .append([$endscreenIntroductionTitle, this.$endscreenIntroductionText, this.$submitButtonContainer])))
       .append($('<div/>', {'class': `${ENDSCREEN_STYLE_BASE}-overview`})
         .append(this.$endscreenOverviewTitle)
-        .append(this.$endscreenBottomTable));
+        .append(this.$endscreenBottomTable))
+      .append(this.$printEmailButtonContainer);
   }
+
+
+  /**
+   * Handle click on the print button.
+   *
+   */
+  handlePrint() {
+
+    window.print();
+    return false;
+
+
+  }
+
+  /**
+   * Handle click on the email button.
+   *
+   */
+  handleEmail() {
+
+      var table = document.getElementsByClassName('h5p-interactive-video-endscreen-overview-table')[0];
+
+      var excludedClasses = ['h5p-interactive-video-endscreen-overview-table-row-time',
+        'h5p-interactive-video-endscreen-overview-table-row-score'];
+
+      var titledClasses = ['h5p-interactive-video-endscreen-overview-table-row-title'];
+
+      //functions
+      function getMailtoLink(element) {
+
+        const body = getElementTextContent(element,titledClasses,excludedClasses);
+        const href = "mailto:?body=" + convertToMailBody(body);
+        return href;
+      }
+
+      function convertToMailBody(text) {
+        return encodeURIComponent(text);
+      }
+
+      function getElementTextContent(element, titledClasses =[], excludedClasses = []) {
+        
+        //get a copy of the element
+        if (!element) return '';
+        var temp = document.createElement("div");
+        temp.innerHTML = element.innerHTML;
+
+        //remove unwanted childs
+        for (let className of excludedClasses) {
+          removeElementsByClass(temp,className)
+        }
+
+        //add fluff to the titles
+        for (let className of titledClasses) {
+          for (let title of temp.getElementsByClassName(className)) {
+            title.innerHTML += ":\n";
+          }
+        }
+
+        //convert to text
+        const childNodes = Array.from(temp.childNodes);
+        const textContent = childNodes.map(node => node.textContent.trim()+'\n').join('\n');
+        return textContent.replace(/[^:\n\w ]/g, '');
+      }
+
+      function removeElementsByClass(parent, className){
+          const elements = parent.getElementsByClassName(className);
+          while(elements.length > 0){
+              elements[0].parentNode.removeChild(elements[0]);
+          }
+      }
+
+      const mailLink = getMailtoLink(table);
+      window.location.href = mailLink;
+  }
+
 
   /**
    * Handle click on the submit button.
