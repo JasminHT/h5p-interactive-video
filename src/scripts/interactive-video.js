@@ -359,6 +359,9 @@ function InteractiveVideo(params, id, contentData) {
         }
         case H5P.Video.PLAYING:
           if (firstPlay) {
+
+            self.$overlay.removeClass('h5p-visible');
+
             // Qualities might not be available until after play.
             self.addQualityChooser();
 
@@ -837,7 +840,7 @@ InteractiveVideo.prototype.attach = function ($container) {
 InteractiveVideo.prototype.attachVideo = function ($wrapper) {
   this.video.attach($wrapper);
   if (!this.justVideo) {
-    this.$overlay = $('<div class="h5p-overlay h5p-ie-transparent-background"></div>').appendTo($wrapper);
+    this.$overlay = $('<div class="h5p-overlay h5p-ie-transparent-background h5p-visible"></div>').appendTo($wrapper);
   }
 };
 
